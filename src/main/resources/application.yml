@@ -1,0 +1,4 @@
+weatherapp:
+  openweather:
+    baseUrl: http://api.openweathermap.org/data/2.5/weather
+    appid: 17d9d1f6ba2be4ff15f6b8e0b94c845a

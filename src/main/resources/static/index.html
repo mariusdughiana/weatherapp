@@ -1,0 +1,143 @@
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--<meta charset="utf-8" />-->
+<!--<meta http-equiv="X-UA-Compatible" content="IE=edge" />-->
+<!--<title>Demo</title>-->
+<!--<meta name="description" content="" />-->
+<!--<meta name="viewport" content="width=device-width" />-->
+<!--<base href="/" />-->
+<!--<link rel="stylesheet" type="text/css"-->
+<!--href="/webjars/bootstrap/css/bootstrap.min.css" />-->
+<!--<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>-->
+<!--<script type="text/javascript"-->
+<!--src="/webjars/bootstrap/js/bootstrap.min.js"></script>-->
+<!--</head>-->
+<!--<body ng-app="app" ng-controller="home as home">-->
+<!--<h1>WeatherApp</h1>-->
+<!--<div class="container" ng-show="!home.citySubmited">-->
+<!--<div>-->
+<!--<form ng-submit="submit()" ng-controller="ExampleController">-->
+<!--Enter City:-->
+<!--<input type="text" ng-model="text" name="text" />-->
+<!--<input type="submit" id="submit" value="Submit" />-->
+<!--</form>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--<div class="container" ng-show="home.authenticated">-->
+<!--Logged in as: <span ng-bind="home.user"></span>-->
+<!--<div>-->
+<!--<button ng-click="home.logout()" class="btn btn-primary">Logout</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--<script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>-->
+<!--<script type="text/javascript">-->
+<!--angular-->
+<!--.module("app", [])-->
+
+<!--.controller('ExampleController', ['$scope', function($scope) {-->
+<!--$scope.submit = function() {-->
+
+<!--$http.get("http://localhost:8080/weather/city/london").success(function(data) {-->
+<!--if (data.name) {-->
+<!--self.user = data.name;-->
+<!--self.authenticated = true;-->
+<!--} else {-->
+<!--self.user = "N/A";-->
+<!--self.authenticated = false;-->
+<!--}-->
+<!--})-->
+<!--};-->
+<!--}]);-->
+<!--//				.config(-->
+<!--//						function($httpProvider) {-->
+<!--//							$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';-->
+<!--//						}).controller("home", function($http, $location) {-->
+<!--//					var self = this;-->
+<!--//					$http.get("/user").success(function(data) {-->
+<!--//						if (data.name) {-->
+<!--//							self.user = data.name;-->
+<!--//							self.authenticated = true;-->
+<!--//						} else {-->
+<!--//							self.user = "N/A";-->
+<!--//							self.authenticated = false;-->
+<!--//						}-->
+<!--//					}).error(function() {-->
+<!--//						self.user = "N/A";-->
+<!--//						self.authenticated = false;-->
+<!--//					});-->
+<!--//					self.logout = function() {-->
+<!--//						$http.post('logout', {}).success(function() {-->
+<!--//							self.authenticated = false;-->
+<!--//							$location.path("/");-->
+<!--//						}).error(function(data) {-->
+<!--//							console.log("Logout failed")-->
+<!--//							self.authenticated = false;-->
+<!--//						});-->
+<!--//					};-->
+<!--//				});-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>WeatherApp</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link rel="stylesheet" type="text/css"
+          href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
+<body ng-app="app" ng-controller="home as home">
+<script type="text/javascript">
+    angular.module('app', [])
+            .config(
+                    function ($httpProvider) {
+                        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+                    })
+            .controller('home', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+
+
+                $scope.submit = function () {
+                    if ($scope.text) {
+                        $http({method: 'GET', url: 'http://localhost:8080/weather/city/' + $scope.text})
+
+                                .then(function successCallback(response) {
+                                    $scope.$parent.home.data = response.data;
+                                }, function errorCallback(response) {
+                                    response;
+                                });
+                    }
+                }
+            }]);
+</script>
+<div class="container">
+    <form ng-submit="submit()" ng-controller="home">
+        City name
+        <input type="text" ng-model="text" name="text"/>
+        <input type="submit" id="submit" value="Submit"/>
+    </form>
+</div>
+
+<div class="container" ng-show="home.data">
+    Date: <span ng-bind="home.data.date"></span><br>
+    City: <span ng-bind="home.data.city"></span><br>
+    Weather: <span ng-bind="home.data.description"></span><br>
+    Fahrenheit: <span ng-bind="home.data.tempF"></span><br>
+    Celsius: <span ng-bind="home.data.tempC"></span><br>
+    Sunrise: <span ng-bind="home.data.sunrise"></span><br>
+    Sunset: <span ng-bind="home.data.sunset"></span><br>
+</div>
+</div>
+
+</body>
+</html>
